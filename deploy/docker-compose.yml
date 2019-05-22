@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+
+  nginx-proxy:
+    image: rspeer-nginx-docker
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  api:
+    image: rspeer-api
+    environment:
+      VIRTUAL_HOST: dev-services.rspeer.org
+      ASPNETCORE_ENVIRONMENT: Production
+      PORT: 80
+    depends_on:
+      - redis
+      - postgres
+
+  compiler:
+    image: rspeer-compiler
+    environment:
+      VIRTUAL_HOST: dev-compiler.rspeer.org
+      ASPNETCORE_ENVIRONMENT: Production
+      PORT: 80
+
+  redis:
+    image: "redis"
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/rspeer_postgress_pass
+      PGDATA: '/var/lib/postgresql/data/rspeer'
+    volumes:
+      - /var/lib/postgresql/data/rspeer:/var/lib/postgresql/data/rspeer
+    secrets:
+      - rspeer_postgress_pass
+
+  instance-ws:
+    image: rspeer-ws:latest
+    environment:
+      VIRTUAL_HOST: instance.rspeer.org
+
+secrets:
+  rspeer_postgress_pass:
+    external: true
