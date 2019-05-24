@@ -11,7 +11,7 @@ services:
   api:
     image: rspeer-api
     environment:
-      VIRTUAL_HOST: dev-services.rspeer.org
+      VIRTUAL_HOST: services.rspeer.org
       ASPNETCORE_ENVIRONMENT: Production
       PORT: 80
     depends_on:
@@ -21,7 +21,7 @@ services:
   compiler:
     image: rspeer-compiler
     environment:
-      VIRTUAL_HOST: dev-compiler.rspeer.org
+      VIRTUAL_HOST: compile.rspeer.org
       ASPNETCORE_ENVIRONMENT: Production
       PORT: 80
 
@@ -44,6 +44,11 @@ services:
     image: rspeer-ws:latest
     environment:
       VIRTUAL_HOST: instance.rspeer.org
+
+  bot-panel-ws:
+    image: rspeer-bot-panel-ws:latest
+    environment:
+      VIRTUAL_HOST: socket.rspeer.org     
 
 secrets:
   rspeer_postgress_pass:
