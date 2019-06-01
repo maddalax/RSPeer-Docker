@@ -11,7 +11,7 @@ services:
   api:
     image: rspeer-api
     environment:
-      VIRTUAL_HOST: services.rspeer.org
+      VIRTUAL_HOST: services.rspeer.org,api.rspeer.org
       ASPNETCORE_ENVIRONMENT: Production
       PORT: 80
     depends_on:
@@ -24,6 +24,13 @@ services:
       VIRTUAL_HOST: compile.rspeer.org
       ASPNETCORE_ENVIRONMENT: Production
       PORT: 80
+
+  instance-ws-dotnet:
+    image: rspeer-ws-dotnet
+    environment:
+      VIRTUAL_HOST: instance-dotnet.rspeer.org
+      ASPNETCORE_ENVIRONMENT: Production
+      PORT: 80   
 
   redis:
     image: "redis"
@@ -39,11 +46,6 @@ services:
       - /var/lib/postgresql/data/rspeer:/var/lib/postgresql/data/rspeer
     secrets:
       - rspeer_postgress_pass
-
-  instance-ws:
-    image: rspeer-ws:latest
-    environment:
-      VIRTUAL_HOST: instance.rspeer.org
 
   bot-panel-ws:
     image: rspeer-bot-panel-ws:latest
